@@ -1,5 +1,6 @@
-package artchain.farmpro.content;
+package artchain.farmpro.card;
 
+import artchain.farmpro.content.Content;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

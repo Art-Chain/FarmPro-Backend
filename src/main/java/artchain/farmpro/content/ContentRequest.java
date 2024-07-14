@@ -1,5 +1,6 @@
 package artchain.farmpro.content;
 
+import artchain.farmpro.card.CardsRequest;
 import artchain.farmpro.crop.CropRequest;
 import java.util.List;
 

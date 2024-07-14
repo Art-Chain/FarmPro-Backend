@@ -1,4 +1,4 @@
-package artchain.farmpro.content;
+package artchain.farmpro.card;
 
 import java.util.List;
 

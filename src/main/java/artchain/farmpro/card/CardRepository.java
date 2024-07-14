@@ -1,4 +1,4 @@
-package artchain.farmpro.content;
+package artchain.farmpro.card;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
