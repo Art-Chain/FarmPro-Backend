@@ -12,7 +12,7 @@ public class CropController {
 
     private CropService cropService;
 
-    @GetMapping("/keywords")
+    @GetMapping("/crops")
     public ResponseEntity<CropResponses> getCropsWithKeywords(@RequestParam String keyword) {
         CropResponses response = cropService.findCrop(keyword);
         return ResponseEntity.ok(response);
