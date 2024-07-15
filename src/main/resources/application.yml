@@ -17,3 +17,10 @@ spring:
     console:
       enabled: true
 
+openai:
+  key:
+  image-generation:
+    endpoint: https://api.openai.com/v1/images/generations
+    model: dall-e-3
+    n: 1
+    size: 1024x1024
