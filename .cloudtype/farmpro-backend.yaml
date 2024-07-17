@@ -1,0 +1,10 @@
+name: farmpro-backend
+app: java@17
+options:
+  ports: 8080
+  env: []
+  buildenv: []
+context:
+  git:
+    url: git@github.com:Art-Chain/FarmPro-Backend.git
+    branch: develop
