@@ -17,50 +17,55 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ContentService {
 
-    private ContentRepository contentRepository;
-    private CardRepository cardRepository;
-    private CropRepository cropRepository;
-    private SelectedCropRepository selectedCropRepository;
+	private ContentRepository contentRepository;
+	private CardRepository cardRepository;
+	private CropRepository cropRepository;
+	private SelectedCropRepository selectedCropRepository;
 
-    @Transactional
-    public Long createContent(ContentRequest request) {
-        Content content = saveContent(request);
-        saveSelectedCrops(request, content);
-        saveCards(request, content);
+	@Transactional
+	public Long createContent(ContentRequest request) {
+		Content content = saveContent(request);
+		saveSelectedCrops(request, content);
+		saveCards(request, content);
 
-        // TODO: asynchronous하게 GPT 호출 (이미지 생성)
-        return content.getId();
-    }
+		// TODO: asynchronous하게 GPT 호출 (이미지 생성)
+		return content.getId();
+	}
 
-    private Content saveContent(ContentRequest request) {
-        Content content = new Content(request.contentType(), request.contentPurpose(),
-                request.mainText(), request.textStyle());
-        return contentRepository.save(content);
-    }
+	private Content saveContent(ContentRequest request) {
+		Content content = new Content(request.contentType(), request.contentPurpose(),
+				request.mainText(), request.textStyle());
+		return contentRepository.save(content);
+	}
 
-    private void saveSelectedCrops(ContentRequest request, Content content) {
-        List<SelectedCrop> selectedCrops = request.crops()
-                .stream()
-                .map(each -> cropRepository.searchByNameIs(each.name())
-                        .orElseThrow(IllegalArgumentException::new)) // TODO: batch 쿼리로 최적화
-                .map(each -> new SelectedCrop(content, each))
-                .toList();
-        selectedCropRepository.saveAll(selectedCrops);
-    }
+	private void saveSelectedCrops(ContentRequest request, Content content) {
+		List<SelectedCrop> selectedCrops = request.crops()
+				.stream()
+				.map(each -> cropRepository.searchByNameIs(each.name())
+						.orElseThrow(IllegalArgumentException::new)) // TODO: batch 쿼리로 최적화
+				.map(each -> new SelectedCrop(content, each))
+				.toList();
+		selectedCropRepository.saveAll(selectedCrops);
+	}
 
-    private void saveCard(CardRequest cardRequest, Content content, String cardStyle) {
-        Card card = new Card(content, cardRequest.title(), cardRequest.keywords(), cardStyle);
-        cardRepository.save(card);
-    }
+	private void saveCard(CardRequest cardRequest, Content content, String cardStyle) {
+		Card card = new Card(content, cardRequest.title(), cardRequest.keywords(), cardStyle);
+		cardRepository.save(card);
+	}
 
-    private void saveCards(ContentRequest request, Content content) {
-        CardsRequest cardRequests = request.cards();
-        CardRequest rootCardRequest = cardRequests.root();
+	private void saveCards(ContentRequest request, Content content) {
+		CardsRequest cardRequests = request.cards();
+		CardRequest rootCardRequest = cardRequests.root();
 
-        saveCard(rootCardRequest, content, request.cardStyle());
-        List<CardRequest> otherCardsRequest = cardRequests.others();
-        for (CardRequest cardRequest : otherCardsRequest) {
-            saveCard(cardRequest, content, request.cardStyle());
-        }
-    }
+		saveCard(rootCardRequest, content, request.cardStyle());
+		List<CardRequest> otherCardsRequest = cardRequests.others();
+		for (CardRequest cardRequest : otherCardsRequest) {
+			saveCard(cardRequest, content, request.cardStyle());
+		}
+	}
+
+	public ContentResponses getContentFeed() {
+		List<Content> contents = contentRepository.findTop3ByOrderByIdAsc();
+		return ContentResponses.from(contents);
+	}
 }
