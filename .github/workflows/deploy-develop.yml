@@ -25,9 +25,6 @@ jobs:
             app: java@17
             options:
               ports: 8080
-              env:
-                - name: GHP_TOKEN
-                  value: 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
               buildenv: []
             context:
               git:
