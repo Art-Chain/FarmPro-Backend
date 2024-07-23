@@ -27,14 +27,12 @@ public class ContentService {
 		Content content = saveContent(request);
 		saveSelectedCrops(request, content);
 		saveCards(request, content);
-
-		// TODO: asynchronous하게 GPT 호출 (이미지 생성)
 		return content.getId();
 	}
 
 	private Content saveContent(ContentRequest request) {
 		Content content = new Content(request.contentType(), request.contentPurpose(),
-				request.mainText(), request.textStyle());
+				request.mainText(), request.cardStyle());
 		return contentRepository.save(content);
 	}
 
@@ -42,7 +40,7 @@ public class ContentService {
 		List<SelectedCrop> selectedCrops = request.crops()
 				.stream()
 				.map(each -> cropRepository.searchByNameIs(each.name())
-						.orElseThrow(IllegalArgumentException::new)) // TODO: batch 쿼리로 최적화
+						.orElseThrow(IllegalArgumentException::new))
 				.map(each -> new SelectedCrop(content, each))
 				.toList();
 		selectedCropRepository.saveAll(selectedCrops);
