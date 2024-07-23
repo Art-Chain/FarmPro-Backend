@@ -27,14 +27,6 @@ public class ContentService {
 		Content content = saveContent(request);
 		saveSelectedCrops(request, content);
 		saveCards(request, content);
-
-		// TODO: 카드 개수만큼 프론트에서 이미지 생성 요청 ( 그럼 서버는 요청을 건당으로 받고)
-
-		// TODO: 이미지 생성 후 S3에 업로드 -> URL 반환 -> 설명 요청 프롬프트에 URL 입력해서 이미지 설명 글 얻음 -> 이미지 생성 프롬프트에 첨부
-
-		// TODO: ai가 생성한 이미지 결과 URL을 content에 저장
-		// 유의 : 이미지 생성이 실패하더라도 content는 저장되어야 함
-		// 유의 :
 		return content.getId();
 	}
 
@@ -48,7 +40,7 @@ public class ContentService {
 		List<SelectedCrop> selectedCrops = request.crops()
 				.stream()
 				.map(each -> cropRepository.searchByNameIs(each.name())
-						.orElseThrow(IllegalArgumentException::new)) // TODO: batch 쿼리로 최적화
+						.orElseThrow(IllegalArgumentException::new))
 				.map(each -> new SelectedCrop(content, each))
 				.toList();
 		selectedCropRepository.saveAll(selectedCrops);
