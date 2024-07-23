@@ -7,5 +7,4 @@ import artchain.farmpro.content.ParlanceStyle;
 
 public record PromptPropertyParser(String objectName, ContentType contentType, ContentPurpose contentPurpose,
                                    String mainText, ParlanceStyle parlanceStyle, CardStyle cardStyle) {
-	// TODO : 키워드 !!! List<String>
 }
