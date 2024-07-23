@@ -28,13 +28,19 @@ public class ContentService {
 		saveSelectedCrops(request, content);
 		saveCards(request, content);
 
-		// TODO: asynchronous하게 GPT 호출 (이미지 생성)
+		// TODO: 카드 개수만큼 프론트에서 이미지 생성 요청 ( 그럼 서버는 요청을 건당으로 받고)
+
+		// TODO: 이미지 생성 후 S3에 업로드 -> URL 반환 -> 설명 요청 프롬프트에 URL 입력해서 이미지 설명 글 얻음 -> 이미지 생성 프롬프트에 첨부
+
+		// TODO: ai가 생성한 이미지 결과 URL을 content에 저장
+		// 유의 : 이미지 생성이 실패하더라도 content는 저장되어야 함
+		// 유의 :
 		return content.getId();
 	}
 
 	private Content saveContent(ContentRequest request) {
 		Content content = new Content(request.contentType(), request.contentPurpose(),
-				request.mainText(), request.textStyle());
+				request.mainText(), request.cardStyle());
 		return contentRepository.save(content);
 	}
 
