@@ -18,9 +18,14 @@ spring:
       enabled: true
 
 openai:
-  key:
+  key: ${OPENAI_API_KEY}
   image-generation:
     endpoint: https://api.openai.com/v1/images/generations
     model: dall-e-3
     n: 1
     size: 1024x1024
+
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: alpha
