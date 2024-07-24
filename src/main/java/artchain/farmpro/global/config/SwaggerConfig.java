@@ -4,11 +4,15 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
+
+	@Value("${ngrok.rest-docs.url}")
+	private String restDocsUrl;
 
 	@Bean
 	public OpenAPI openAPI() {
@@ -20,9 +24,13 @@ public class SwaggerConfig {
 		Server productionServer = new Server();
 		productionServer.setDescription("develop server");
 
+		Server testServer = new Server();
+		testServer.setDescription("develop server");
+
+		testServer.setUrl(restDocsUrl);
 		return new OpenAPI()
 				.info(getSwaggerInfo())
-				.servers(List.of(localServer, productionServer));
+				.servers(List.of(localServer, productionServer, testServer));
 	}
 
 	private Info getSwaggerInfo() {
