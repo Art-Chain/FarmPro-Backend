@@ -24,9 +24,7 @@ public class ImageService {
 
 	private final AmazonS3 s3Client;
 
-	public Map<String, String> getPresignedUrl(ContentImageUploadRequest request) {
-		String prefix = request.imageType();
-		String fileName = request.fileName();
+	public Map<String, String> getPresignedUrl(String prefix, String fileName) {
 		if (!prefix.isEmpty()) {
 			fileName = createPath(prefix, fileName);
 		}
