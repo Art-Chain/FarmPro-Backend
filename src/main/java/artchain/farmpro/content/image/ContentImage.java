@@ -23,7 +23,7 @@ public class ContentImage {
 
 	private String title;
 
-	@Column(length = 1000)
+	@Column(name = "image_url", length = 1000)
 	private String imageUrl;
 
 	@ManyToOne

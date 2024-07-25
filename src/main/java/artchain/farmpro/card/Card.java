@@ -30,13 +30,14 @@ public class Card {
 	private String keywords;
 
 	private String cardStyle;
-	
+
 	private String imageUrl;
 
-	public Card(Content content, String title, String keywords, String cardStyle) {
+	public Card(Content content, String title, String keywords, String cardStyle, String imageUrl) {
 		this.content = content;
 		this.title = title;
 		this.keywords = keywords;
 		this.cardStyle = cardStyle;
+		this.imageUrl = imageUrl;
 	}
 }

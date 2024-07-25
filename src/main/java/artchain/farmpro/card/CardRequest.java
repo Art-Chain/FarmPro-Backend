@@ -1,4 +1,4 @@
 package artchain.farmpro.card;
 
-public record CardRequest(String title, String keywords) {
+public record CardRequest(String title, String keywords, String url) {
 }

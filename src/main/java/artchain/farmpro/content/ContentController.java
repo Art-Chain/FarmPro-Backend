@@ -22,8 +22,7 @@ public class ContentController {
 	@Operation(summary = "컨텐츠 생성")
 	@PostMapping("/contents")
 	public ResponseEntity<List<ChatGptResponse>> createContent(@RequestBody ContentRequest request) {
-		List<ChatGptResponse> responses = contentService.createContent(request);
-		return ResponseEntity.ok(responses);
+		return ResponseEntity.ok(contentService.createContent(request));
 	}
 
 	@Operation(summary = "컨텐츠 목록 중 상위 3개 조회")
@@ -45,5 +44,12 @@ public class ContentController {
 	public ResponseEntity<ContentResponse> getContentDetail(@PathVariable Long contentId) {
 		ContentResponse contentDetail = contentService.getContentDetail(contentId);
 		return ResponseEntity.ok(contentDetail);
+	}
+
+	@Operation(summary = "장표별 제목과 키워드를 추천")
+	@PostMapping("/contents/recommend")
+	public ResponseEntity<ContentRecommendResponse> recommendContent(@RequestBody ContentRecommendRequest request) {
+		String response = contentService.generateRecommendPrompt(request);
+		return ResponseEntity.ok(new ContentRecommendResponse(response, response));
 	}
 }

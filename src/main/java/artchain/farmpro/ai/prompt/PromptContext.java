@@ -3,10 +3,12 @@ package artchain.farmpro.ai.prompt;
 import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class PromptContext {
 	private final List<PromptStrategy> promptStrategies = new ArrayList<>();
 
