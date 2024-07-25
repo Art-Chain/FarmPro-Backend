@@ -1,4 +1,4 @@
-package artchain.farmpro.content;
+package artchain.farmpro.content.image;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,13 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RestController
 public class ImageController {
+	
+	private final ImageService imageService;
 
 	@Operation(summary = "컨텐츠 이미지 업로드 위치 요청", description = "컨텐츠 이미지를 업로드할 수 있는 URL을 제공합니다.")
 	@GetMapping("/image")
 	public ResponseEntity<ContentImagePresignedUrlVO> getContentImage(
-			@RequestBody final ContentImageUploadRequest request) {
+			@RequestBody ContentImageUploadRequest request) {
 		return ResponseEntity
-				.ok(new ContentImagePresignedUrlVO("key-test", "https://s3.ap-northeast-2.amazonaws.com/bucket/key"));
+				.ok(ContentImagePresignedUrlVO.of(request.fileName(), imageService.getPresignedUrl(request)));
 	}
 
 	@Operation(summary = "컨텐츠 이미지 업로드 완료", description = "컨텐츠 이미지 업로드 완료를 알립니다.")
