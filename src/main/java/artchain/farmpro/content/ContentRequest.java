@@ -10,6 +10,7 @@ public record ContentRequest(
 		ContentType contentType,
 		ContentPurpose contentPurpose,
 		CardsRequest cards,
+		String title,
 		String mainText,
 		String parlanceStyle,
 		String cardStyle) {

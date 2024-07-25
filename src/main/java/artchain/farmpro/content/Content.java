@@ -29,15 +29,18 @@ public class Content {
 	@Enumerated(value = EnumType.STRING)
 	private ContentPurpose contentPurpose;
 
+	private String title;
 	private String mainText;
 	private String textStyle;
 
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ContentImage> images;
 
-	public Content(ContentType contentType, ContentPurpose contentPurpose, String mainText, String textStyle) {
+	public Content(ContentType contentType, ContentPurpose contentPurpose, String title, String mainText,
+	               String textStyle) {
 		this.contentType = contentType;
 		this.contentPurpose = contentPurpose;
+		this.title = title;
 		this.mainText = mainText;
 		this.textStyle = textStyle;
 	}
