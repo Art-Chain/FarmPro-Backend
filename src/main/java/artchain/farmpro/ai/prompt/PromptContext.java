@@ -4,7 +4,9 @@ import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.coyote.BadRequestException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PromptContext {
 	private final List<PromptStrategy> promptStrategies = new ArrayList<>();
 
