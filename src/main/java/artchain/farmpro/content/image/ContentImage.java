@@ -20,13 +20,16 @@ public class ContentImage {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	private String title;
+
 	private String imageUrl;
 
 	@ManyToOne
 	@JoinColumn(name = "content_id")
 	private Content content;
 
-	public ContentImage(String imageUrl, Content content) {
+	public ContentImage(String title, String imageUrl, Content content) {
+		this.title = title;
 		this.imageUrl = imageUrl;
 		this.content = content;
 	}

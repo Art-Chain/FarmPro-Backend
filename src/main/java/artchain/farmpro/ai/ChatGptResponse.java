@@ -4,7 +4,7 @@ import java.util.List;
 
 public record ChatGptResponse(List<UrlResponse> data) {
 
-    record UrlResponse(String url, String revisedPrompt) {
+    public record UrlResponse(String url, String revisedPrompt) {
 
     }
 }
