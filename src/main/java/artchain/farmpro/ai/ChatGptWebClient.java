@@ -2,13 +2,9 @@ package artchain.farmpro.ai;
 
 import java.util.HashMap;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @AllArgsConstructor
 @Component
@@ -16,7 +12,7 @@ public class ChatGptWebClient {
 
     private ChatGptConfiguration configuration;
 
-    public ChatGptResponse requestWithPrompt(String prompt) {
+    public Mono<ChatGptResponse> requestWithPrompt(String prompt) {
         HashMap<String, Object> body = setupBody(prompt);
 
         return WebClient.create()
@@ -26,8 +22,7 @@ public class ChatGptWebClient {
                 .header("Authorization", "Bearer " + configuration.getOpenaiKey())
                 .bodyValue(body)
                 .retrieve()
-                .bodyToMono(ChatGptResponse.class)
-                .block();
+                .bodyToMono(ChatGptResponse.class);
     }
 
     private HashMap<String, Object> setupBody(String prompt) {

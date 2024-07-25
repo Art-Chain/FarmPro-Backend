@@ -1,6 +1,8 @@
 package artchain.farmpro.content;
 
+import artchain.farmpro.ai.ChatGptResponse;
 import java.net.URI;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +17,9 @@ public class ContentController {
 	private ContentService contentService;
 
 	@PostMapping("/contents")
-	public ResponseEntity<Void> createContent(@RequestBody ContentRequest request) {
-		Long contentId = contentService.createContent(request);
-		return ResponseEntity.created(URI.create("/content/" + contentId))
-				.build();
+	public ResponseEntity<List<ChatGptResponse>> createContent(@RequestBody ContentRequest request) {
+		List<ChatGptResponse> responses = contentService.createContent(request);
+		return ResponseEntity.ok(responses);
 	}
 
 	@GetMapping("/contents/feeds")
