@@ -10,10 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class CropService {
 
-    private CropRepository cropRepository;
+	private CropRepository cropRepository;
 
-    public CropResponses findCrop(String keyword) {
-        List<Crop> crops = cropRepository.searchCropsByNameContaining(keyword);
-        return CropResponses.from(crops);
-    }
+	public CropResponses findCrop(String keyword) {
+		List<Crop> crops = cropRepository.searchCropsByNameContaining(keyword);
+		return CropResponses.from(crops);
+	}
+
+	public CropResponses findAll() {
+		List<Crop> crops = cropRepository.findAll();
+		return CropResponses.from(crops);
+	}
 }
