@@ -60,7 +60,7 @@ public class ContentService {
 
 	private List<ChatGptResponse> sendContentImagePrompt(List<Card> cards) {
 		List<String> prompts = cards.stream()
-				.map(this::generatePrompt)
+				.map(this::generateImagePrompt)
 				.toList();
 
 		Flux<ChatGptResponse> responseFlux = Flux.fromIterable(prompts)
@@ -137,13 +137,14 @@ public class ContentService {
 				""", cardPrompt, contentPrompt);
 	}
 
-	private String generatePrompt(Card card) {
+	private String generateImagePrompt(Card card) {
 		return String.format("""
-				     You're an expert at creating card images from descriptions.
-				     The card has some characteristics.
-				     - The card image is titled %s.
-				     - The card's keywords are %s.
-				     - The card has a style of %s.
+				     You're an image expert at grocery picture generator and descriptor.
+				     Create fruit, vegetable picture reference below information.
+				     image has some feature that result must referenced.
+				     - image`s main object is titled %s.
+				     - image's keywords are %s. 
+				     - image has a style of %s.
 				     - (Optional) The card has a content like %s.
 				     Card:
 				""", card.getTitle(), card.getKeywords(), card.getCardStyle(), "");
@@ -151,20 +152,18 @@ public class ContentService {
 
 	private String generateContentTextPrompt(ContentRequest request) {
 		return String.format("""
-						You're an expert at creating grocery marketing content.
-						Create 1 line slogan for the grocery marketing card.
-						Must written in Korean.
-						Ex : "당도 200퍼센트 딸기의 계절, 그린팜으로 오세요!"
-						The content has some characteristics:
-						- The crop name is %s.
-						- The farm description is %s.
-						- The crop detail name is %s.
-						- The growing method is %s.
-						- The price is %s.
-						- The contact info is %s.
+						You're an korean expert at creating grocery marketing content.
+						Must written in Korean in 50 word. Only provide title result with no explanation.
+						Create short slogan for the grocery marketing card.
+						result : "당도 200퍼센트 딸기의 계절, 그린팜으로 오세요!"
+						The content has some reference:
+						- crop name: %s.
+						- farm description: %s.
+						- The crop detail name: %s.
+						- The growing method: %s.
+						- price :%s.
+						- The contact info: %s.
 						- The purpose is %s.
-						Based on the above information, please generate appropriate content for the following format:
-						Create 1 line slogan for the grocery marketing card.
 						""",
 				request.projectInfo().cropCategoryName(),
 				request.projectInfo().plantDescription(),
@@ -178,9 +177,9 @@ public class ContentService {
 
 	private String generateMainTextPrompt(ContentRequest request) {
 		return String.format("""
-						You're an expert at creating grocery marketing content.
-						Create effective slogan for the grocery marketing card.
-						Must written in Korean.
+						You're an korean expert at creating grocery marketing content.
+						Must written in Korean. must length in 200 word.
+						Create must length in 200 word slogan for the grocery marketing card.
 						The content has some characteristics:
 						- The crop name is %s.
 						- The farm description is %s.
@@ -189,8 +188,6 @@ public class ContentService {
 						- The price is %s.
 						- The contact info is %s.
 						- The purpose is %s.
-						Based on the above information, please generate appropriate content for the following format:
-						Create 1 line slogan for the grocery marketing card.
 						""",
 				request.projectInfo().cropCategoryName(),
 				request.projectInfo().plantDescription(),
@@ -220,7 +217,7 @@ public class ContentService {
 
 	public String generateRecommendPrompt(ContentRecommendRequest request) {
 		return String.format(""" 
-						    You're an expert at creating titles from descriptions. result must written in Korean.
+						    You're an korean expert at creating titles from descriptions. result must written in Korean.
 						    The content has some characteristics:
 						              - The crop name is %s.
 						              - The farm description is %s.
@@ -229,8 +226,7 @@ public class ContentService {
 						              - The price is %s.
 						              - The contact info is %s.
 						              - The purpose is %s.
-						    Based on the above information, please generate appropriate titles and recommended keywords for each result in the following format:
-						            깨끗한 환경에서 자란 홍로사과 - 유기농, 무농약
+						    Based on the above information, please generate appropriate titles and recommended keywords for result: 깨끗한 환경에서 자란 홍로사과 - 유기농, 무농약
 						""",
 				request.projectInfo().cropCategoryName(),
 				request.projectInfo().plantDescription(),
@@ -243,27 +239,19 @@ public class ContentService {
 
 	public String generateRecommendPrompt(ContentRequest request) {
 		return String.format(""" 
-						    You're an expert at creating titles from descriptions. result must written in Korean.
-						    The content has some characteristics:
-						              - The crop name is %s.
-						              - The farm description is %s.
-						              - The crop detail name is %s.
-						              - The growing method is %s.
-						              - The price is %s.
-						              - The contact info is %s.
-						              - The purpose is %s.
-						    Based on the above information, please generate appropriate titles and recommended keywords for each result in the following format:
-						            깨끗한 환경에서 자란 홍로사과 - 유기농, 무농약
-						             Example:
-						             Crop Name: Apple
-						             Farm Description: Organic apples grown in pristine conditions
-						             Crop Detail Name: Hongro Apple
-						             Growing Method: Pesticide-free cultivation
-						             Price: $10 per box
-						             Contact Info: 010-1234-5678
-						             Purpose: PROMOTION
-						             Generated Title : Korean Title(Must be in Korean): "깨끗한 환경에서 자란 홍로사과 - 유기농, 무농약",
-						""",
+						You're an expert at creating titles from descriptions. result must written in Korean.
+						result must 1 line slogan for the grocery marketing card. Must written in Korean.
+						title is less than 50 words.
+						Appear farm information in the slogan as you can.
+												    example : 깨끗한 환경에서 자란 홍로사과 - 유기농, 무농약
+						The content has some characteristics:
+						          - The crop name is %s.
+						          - The farm description is %s.
+						          - The crop detail name is %s.
+						          - The growing method is %s.
+						          - The price is %s.
+						          - The contact info is %s.
+						          - The purpose is %s.""",
 				request.projectInfo().cropCategoryName(),
 				request.projectInfo().plantDescription(),
 				request.projectInfo().cropDetailName(),
@@ -275,7 +263,9 @@ public class ContentService {
 
 	public String generateRecommendKeywordPrompt(ContentRecommendRequest request) {
 		return String.format(""" 
-						    You're an expert at creating keyword generator from descriptions. result must written in Korean.
+						    You're an korean expert at creating keyword generator from descriptions. result must written in Korean.
+						    example : 유기농, 홍로사과, 무농약, 깨끗한 환경, 신선한 과일
+							result must length in 50 word.
 						    The content has some characteristics:
 						              - The crop name is %s.
 						              - The farm description is %s.
@@ -284,17 +274,6 @@ public class ContentService {
 						              - The price is %s.
 						              - The contact info is %s.
 						              - The purpose is %s.
-						    Based on the above information, please generate appropriate titles and recommended keywords for each result in the following format:
-						            유기농, 홍로사과, 무농약, 깨끗한 환경, 신선한 과일
-						             Example:
-						             Crop Name: Apple
-						             Farm Description: Organic apples grown in pristine conditions
-						             Crop Detail Name: Hongro Apple
-						             Growing Method: Pesticide-free cultivation
-						             Price: $10 per box
-						             Contact Info: 010-1234-5678
-						             Purpose: PROMOTION
-						             Generated Result Keywords: 유기농, 홍로사과, 무농약, 깨끗한 환경, 신선한 과일,
 						""",
 				request.projectInfo().cropCategoryName(),
 				request.projectInfo().plantDescription(),

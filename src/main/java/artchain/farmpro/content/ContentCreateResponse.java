@@ -24,7 +24,7 @@ public record ContentCreateResponse(
 				null,
 				content.getContentType(),
 				content.getContentPurpose(),
-				content.getTitle(),
+				images.images().get(0).title(),
 				content.getGeneratedTitle(),
 				content.getMainText(),
 				content.getTextStyle(),
