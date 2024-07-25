@@ -38,6 +38,10 @@ ngrok:
   rest-docs:
     url: ${NGROK_URL}
 
+production:
+  domain:
+    url: ${PRODUCTION_DOMAIN_URL}
+    
 aws:
   access-key: ${AWS_ACCESS_KEY}
   secret-key: ${AWS_SECRET_KEY}

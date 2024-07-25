@@ -14,6 +14,9 @@ public class SwaggerConfig {
 	@Value("${ngrok.rest-docs.url}")
 	private String restDocsUrl;
 
+	@Value("${production.domain.url}")
+	private String productionDomainUrl;
+
 	@Bean
 	public OpenAPI openAPI() {
 
@@ -23,11 +26,12 @@ public class SwaggerConfig {
 
 		Server productionServer = new Server();
 		productionServer.setDescription("develop server");
+		productionServer.setUrl(productionDomainUrl);
 
 		Server testServer = new Server();
 		testServer.setDescription("develop server");
-
 		testServer.setUrl(restDocsUrl);
+		
 		return new OpenAPI()
 				.info(getSwaggerInfo())
 				.servers(List.of(localServer, productionServer, testServer));
