@@ -44,5 +44,9 @@ public class Content {
 		this.mainText = mainText;
 		this.textStyle = textStyle;
 	}
+
+	public void setImages(List<ContentImage> images) {
+		this.images = images;
+	}
 }
 

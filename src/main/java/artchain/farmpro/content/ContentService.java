@@ -7,10 +7,12 @@ import artchain.farmpro.card.Card;
 import artchain.farmpro.card.CardRepository;
 import artchain.farmpro.card.CardRequest;
 import artchain.farmpro.card.CardsRequest;
+import artchain.farmpro.content.image.ContentImage;
 import artchain.farmpro.content.image.ContentImageResponses;
 import artchain.farmpro.crop.CropRepository;
 import artchain.farmpro.selectedcrop.SelectedCrop;
 import artchain.farmpro.selectedcrop.SelectedCropRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -39,11 +41,16 @@ public class ContentService {
 
 //		String parlancePrompt = request.parlanceStyle().getDescription();
 //		String cardStylePrompt = request.cardStyle().getDescription();
+		List<ChatGptResponse> chatGptResponses = sendPrompt(cards);
+		List<ContentImage> contentImages = new ArrayList<>();
+		for (int i = 0; i < chatGptResponses.size(); i++) {
+			String cardTitle = cards.get(i).getTitle();
+			String imageUrl = chatGptResponses.get(i).data().get(0).url();
+			contentImages.add(new ContentImage(cardTitle, imageUrl, content));
+		}
 
-		List<ChatGptResponse> imageResponses = sendContentImagePrompt(cards);
-		String contentText = sendContentTextPrompt(request);
-		ContentImageResponses contentImageResponses = ContentImageResponses.fromGptResponses(imageResponses);
-		return ContentResponse.of(content, contentImageResponses);
+		content.setImages(contentImages);
+		return chatGptResponses;
 	}
 
 	private ContentRecommendResponse createRecommendContent(ContentRecommendRequest request) {
