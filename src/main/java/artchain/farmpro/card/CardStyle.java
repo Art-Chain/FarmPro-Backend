@@ -14,7 +14,7 @@ public enum CardStyle {
 	MODERN("Modern",
 			"Utilizes sleek and contemporary design elements with clean tones."),
 	HUMOROUS("Humorous",
-			"Employs cheerful and funny images with bright colors to evoke laughter.");
+			"Employs cheerful and funny userUploadImages with bright colors to evoke laughter.");
 
 	private final String name;
 

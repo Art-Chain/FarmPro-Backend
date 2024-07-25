@@ -2,6 +2,7 @@ package artchain.farmpro.content;
 
 import artchain.farmpro.content.image.ContentImage;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,7 +33,9 @@ public class Content {
 	private String title;
 	private String mainText;
 	private String textStyle;
-
+	private String generatedTitle;
+	@Column(columnDefinition = "TEXT", length = 5000)
+	private String generatedMainText;
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ContentImage> images;
 
@@ -47,6 +50,14 @@ public class Content {
 
 	public void setImages(List<ContentImage> images) {
 		this.images = images;
+	}
+
+	public void setGeneratedTitle(String generatedTitle) {
+		this.generatedTitle = generatedTitle;
+	}
+
+	public void setGeneratedMainText(String generatedMainText) {
+		this.generatedMainText = generatedMainText;
 	}
 }
 

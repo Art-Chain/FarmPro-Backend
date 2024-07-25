@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -24,6 +25,8 @@ public class ChatGptWebClient {
 				.header("Authorization", "Bearer " + configuration.getOpenaiKey())
 				.bodyValue(body)
 				.retrieve()
+				.onStatus(HttpStatusCode::is4xxClientError,
+						clientResponse -> clientResponse.bodyToMono(String.class).map(Exception::new))
 				.bodyToMono(ChatGptResponse.class);
 	}
 
@@ -32,7 +35,7 @@ public class ChatGptWebClient {
 
 		return WebClient.create()
 				.post()
-				.uri(configuration.getImageModelEndpoint())
+				.uri(configuration.getTextModelEndpoint())
 				.header("Content-Type", "application/json")
 				.header("Authorization", "Bearer " + configuration.getOpenaiKey())
 				.bodyValue(body)
@@ -46,7 +49,7 @@ public class ChatGptWebClient {
 
 		return WebClient.create()
 				.post()
-				.uri(configuration.getImageModelEndpoint())
+				.uri(configuration.getTextModelEndpoint())
 				.header("Content-Type", "application/json")
 				.header("Authorization", "Bearer " + configuration.getOpenaiKey())
 				.bodyValue(body)
@@ -66,7 +69,7 @@ public class ChatGptWebClient {
 
 	private HashMap<String, Object> setupTextBodyOutput(String prompt) {
 		HashMap<String, Object> body = new HashMap<>();
-		body.put("model", configuration.getImageModel());
+		body.put("model", configuration.getTextModel());
 		List<HashMap<String, String>> messages = new ArrayList<>();
 		HashMap<String, String> userMessage = new HashMap<>();
 		userMessage.put("role", "user");

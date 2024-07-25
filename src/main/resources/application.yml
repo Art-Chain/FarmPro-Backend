@@ -25,7 +25,9 @@ openai:
     model: dall-e-3
     n: 1
     size: 1024x1024
-
+  text-generation:
+    endpoint: https://api.openai.com/v1/chat/completions
+    model: gpt-4o
 springdoc:
 
   swagger-ui:

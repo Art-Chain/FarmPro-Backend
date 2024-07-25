@@ -24,6 +24,7 @@ public class Card {
 	@JoinColumn(name = "content_id")
 	private Content content;
 
+	@Column(length = 1000)
 	private String title;
 
 	@Column(nullable = false)
@@ -31,6 +32,7 @@ public class Card {
 
 	private String cardStyle;
 
+	@Column(length = 1000)
 	private String imageUrl;
 
 	public Card(Content content, String title, String keywords, String cardStyle, String imageUrl) {
