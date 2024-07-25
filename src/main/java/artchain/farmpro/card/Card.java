@@ -16,25 +16,27 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Card {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+	@Id
+	@GeneratedValue
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "content_id")
-    private Content content;
+	@ManyToOne
+	@JoinColumn(name = "content_id")
+	private Content content;
 
-    private String title;
+	private String title;
 
-    @Column(nullable = false)
-    private String keywords;
+	@Column(nullable = false)
+	private String keywords;
 
-    private String cardStyle;
+	private String cardStyle;
+	
+	private String imageUrl;
 
-    public Card(Content content, String title, String keywords, String cardStyle) {
-        this.content = content;
-        this.title = title;
-        this.keywords = keywords;
-        this.cardStyle = cardStyle;
-    }
+	public Card(Content content, String title, String keywords, String cardStyle) {
+		this.content = content;
+		this.title = title;
+		this.keywords = keywords;
+		this.cardStyle = cardStyle;
+	}
 }
