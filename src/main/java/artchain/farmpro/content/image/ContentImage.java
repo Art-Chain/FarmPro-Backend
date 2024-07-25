@@ -1,6 +1,7 @@
 package artchain.farmpro.content.image;
 
 import artchain.farmpro.content.Content;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +21,7 @@ public class ContentImage {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(name = "image_url", length = 1000)
 	private String imageUrl;
 
 	@ManyToOne
