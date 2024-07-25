@@ -1,9 +1,7 @@
 package artchain.farmpro.content;
 
-import artchain.farmpro.ai.ChatGptResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +19,8 @@ public class ContentController {
 
 	@Operation(summary = "컨텐츠 생성")
 	@PostMapping("/contents")
-	public ResponseEntity<List<ChatGptResponse>> createContent(@RequestBody ContentRequest request) {
-		List<ChatGptResponse> responses = contentService.createContent(request);
-		return ResponseEntity.ok(responses);
+	public ResponseEntity<ContentResponse> createContent(@RequestBody ContentRequest request) {
+		return ResponseEntity.ok(contentService.createContent(request));
 	}
 
 	@Operation(summary = "컨텐츠 목록 중 상위 3개 조회")
@@ -45,5 +42,12 @@ public class ContentController {
 	public ResponseEntity<ContentResponse> getContentDetail(@PathVariable Long contentId) {
 		ContentResponse contentDetail = contentService.getContentDetail(contentId);
 		return ResponseEntity.ok(contentDetail);
+	}
+
+	@Operation(summary = "장표별 제목과 키워드를 추천")
+	@PostMapping("/contents/recommend")
+	public ResponseEntity<ContentRecommendResponse> recommendContent(@RequestBody ContentRecommendRequest request) {
+		String response = contentService.generateRecommendPrompt(request);
+		return ResponseEntity.ok(new ContentRecommendResponse(response, response));
 	}
 }

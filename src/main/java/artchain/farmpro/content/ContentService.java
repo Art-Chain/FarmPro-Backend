@@ -32,7 +32,7 @@ public class ContentService {
 	private PromptContext promptContext;
 
 	@Transactional
-	public List<ChatGptResponse> createContent(ContentRequest request) {
+	public ContentResponse createContent(ContentRequest request) {
 		Content content = saveContent(request);
 		saveSelectedCrops(request, content);
 		List<Card> cards = saveCards(request, content);
@@ -40,18 +40,40 @@ public class ContentService {
 //		String parlancePrompt = request.parlanceStyle().getDescription();
 //		String cardStylePrompt = request.cardStyle().getDescription();
 
-		return sendPrompt(cards);
+		List<ChatGptResponse> imageResponses = sendContentImagePrompt(cards);
+		String contentText = sendContentTextPrompt(request);
+		ContentImageResponses contentImageResponses = ContentImageResponses.fromGptResponses(imageResponses);
+		return ContentResponse.of(content, contentImageResponses);
 	}
 
-	private List<ChatGptResponse> sendPrompt(List<Card> cards) {
+	private ContentRecommendResponse createRecommendContent(ContentRecommendRequest request) {
+		return new ContentRecommendResponse(sendRecommendTitlePrompt(request), sendRecommendKeywordPrompt(request));
+	}
+
+	private List<ChatGptResponse> sendContentImagePrompt(List<Card> cards) {
 		List<String> prompts = cards.stream()
 				.map(this::generatePrompt)
 				.toList();
 
 		Flux<ChatGptResponse> responseFlux = Flux.fromIterable(prompts)
-				.flatMap(prompt -> chatGptWebClient.requestWithPrompt(prompt));
+				.flatMap(prompt -> chatGptWebClient.requestImageGenerate(prompt));
 
 		return responseFlux.collectList().block();
+	}
+
+	private String sendContentTextPrompt(ContentRequest request) {
+		String prompt = generateContentTextPrompt(request);
+		return chatGptWebClient.requestTextGenerate(prompt).getContent();
+	}
+
+	private String sendRecommendTitlePrompt(ContentRecommendRequest request) {
+		String prompt = generateRecommendPrompt(request);
+		return chatGptWebClient.requestTextGenerate(prompt).getContent();
+	}
+
+	private String sendRecommendKeywordPrompt(ContentRecommendRequest request) {
+		String prompt = generateRecommendKeywordPrompt(request);
+		return chatGptWebClient.requestKeywordGenerate(prompt).getContent();
 	}
 
 	private Content saveContent(ContentRequest request) {
@@ -70,20 +92,20 @@ public class ContentService {
 		selectedCropRepository.saveAll(selectedCrops);
 	}
 
-	private Card saveCard(CardRequest cardRequest, Content content, String cardStyle) {
-		Card card = new Card(content, cardRequest.title(), cardRequest.keywords(), cardStyle);
+	private Card saveCard(CardRequest cardRequest, Content content, String cardStyle, String imageUrl) {
+		Card card = new Card(content, cardRequest.title(), cardRequest.keywords(), cardStyle, imageUrl);
 		return cardRepository.save(card);
 	}
 
 	private List<Card> saveCards(ContentRequest request, Content content) {
 		CardsRequest cardRequests = request.cards();
 		CardRequest rootCardRequest = cardRequests.root();
-		saveCard(rootCardRequest, content, request.cardStyle());
+		saveCard(rootCardRequest, content, request.cardStyle(), rootCardRequest.url());
 
 		List<Card> cards = cardRequests.others().stream()
-				.map(each -> saveCard(each, content, request.cardStyle()))
+				.map(each -> saveCard(each, content, request.cardStyle(), each.url()))
 				.collect(Collectors.toList());
-		cards.add(saveCard(rootCardRequest, content, request.cardStyle()));
+		cards.add(saveCard(rootCardRequest, content, request.cardStyle(), rootCardRequest.url()));
 
 		return cards;
 	}
@@ -98,7 +120,6 @@ public class ContentService {
 	}
 
 	private String generatePrompt(Card card) {
-		// TODO : 여기를 더 구체화 -> 이건 이미지 만드는 프롬프트고, 본문 만드는 프롬프트 메소드를 따로 만들어서 generatePrompt에서 합쳐서 리턴하도록
 		return String.format("""
 				     You're an expert at creating card images from descriptions.
 				     
@@ -112,19 +133,28 @@ public class ContentService {
 				""", card.getTitle(), card.getKeywords(), card.getCardStyle(), "");
 	}
 
-	private String generateContentTextPrompt(Content content) {
+	private String generateContentTextPrompt(ContentRequest request) {
 		return String.format("""
-						     You're an expert at creating content from descriptions.
-						     
-						     The content has some characteristics.
-						     - The content is for %s.
-						     - The content has a purpose of %s.
-						     - The content has a style of %s.
-						     - The content has a main text like %s.
-						     
-						     Content:
-						""", content.getContentType(), content.getContentPurpose(), content.getTextStyle(),
-				content.getMainText());
+						You're an expert at creating grocery marketing content.
+						The content has some characteristics:
+						- The crop name is %s.
+						- The farm description is %s.
+						- The crop detail name is %s.
+						- The growing method is %s.
+						- The price is %s.
+						- The contact info is %s.
+						- The purpose is %s.
+						Based on the above information, please generate appropriate content for the following format:
+						%s
+						""",
+				request.projectInfo().cropCategoryName(),
+				request.projectInfo().plantDescription(),
+				request.projectInfo().cropDetailName(),
+				request.projectInfo().growMethod(),
+				request.projectInfo().cropPrice(),
+				request.projectInfo().plantContactInfo(),
+				request.contentPurpose(),
+				"");
 	}
 
 	public ContentResponses getContentFeed() {
@@ -147,5 +177,69 @@ public class ContentService {
 		Content content = contentRepository.findById(contentId)
 				.orElseThrow(IllegalArgumentException::new);
 		return ContentImageResponses.from(content.getImages());
+	}
+
+	public String generateRecommendPrompt(ContentRecommendRequest request) {
+		return String.format(""" 
+						    You're an expert at creating titles from descriptions. result must written in Korean.
+						    The content has some characteristics:
+						              - The crop name is %s.
+						              - The farm description is %s.
+						              - The crop detail name is %s.
+						              - The growing method is %s.
+						              - The price is %s.
+						              - The contact info is %s.
+						              - The purpose is %s.
+						    Based on the above information, please generate appropriate titles and recommended keywords for each result in the following format:
+						            깨끗한 환경에서 자란 홍로사과 - 유기농, 무농약
+						             Example:
+						             Crop Name: Apple
+						             Farm Description: Organic apples grown in pristine conditions
+						             Crop Detail Name: Hongro Apple
+						             Growing Method: Pesticide-free cultivation
+						             Price: $10 per box
+						             Contact Info: 010-1234-5678
+						             Purpose: PROMOTION
+						             Generated Title : Korean Title(Must be in Korean): "깨끗한 환경에서 자란 홍로사과 - 유기농, 무농약",
+						""",
+				request.projectInfo().cropCategoryName(),
+				request.projectInfo().plantDescription(),
+				request.projectInfo().cropDetailName(),
+				request.projectInfo().growMethod(),
+				request.projectInfo().cropPrice(),
+				request.projectInfo().plantContactInfo(),
+				request.contentPurpose());
+	}
+
+	public String generateRecommendKeywordPrompt(ContentRecommendRequest request) {
+		return String.format(""" 
+						    You're an expert at creating titles from descriptions. result must written in Korean.
+						    The content has some characteristics:
+						              - The crop name is %s.
+						              - The farm description is %s.
+						              - The crop detail name is %s.
+						              - The growing method is %s.
+						              - The price is %s.
+						              - The contact info is %s.
+						              - The purpose is %s.
+						    Based on the above information, please generate appropriate titles and recommended keywords for each result in the following format:
+						            유기농, 홍로사과, 무농약, 깨끗한 환경, 신선한 과일
+						             Example:
+						             Crop Name: Apple
+						             Farm Description: Organic apples grown in pristine conditions
+						             Crop Detail Name: Hongro Apple
+						             Growing Method: Pesticide-free cultivation
+						             Price: $10 per box
+						             Contact Info: 010-1234-5678
+						             Purpose: PROMOTION
+						             Generated Result Keywords: 유기농, 홍로사과, 무농약, 깨끗한 환경, 신선한 과일,
+						""",
+				request.projectInfo().cropCategoryName(),
+				request.projectInfo().plantDescription(),
+				request.projectInfo().cropDetailName(),
+				request.projectInfo().growMethod(),
+				request.projectInfo().cropPrice(),
+				request.projectInfo().plantContactInfo(),
+				request.contentPurpose());
 	}
 }
