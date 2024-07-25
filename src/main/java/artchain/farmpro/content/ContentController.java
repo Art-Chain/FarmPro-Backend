@@ -31,4 +31,11 @@ public class ContentController {
 		ContentResponses contentFeed = contentService.getContentFeed();
 		return ResponseEntity.ok(contentFeed);
 	}
+
+	@Operation(summary = "컨텐츠 목록 조회")
+	@GetMapping("/contents/lists")
+	public ResponseEntity<ContentResponses> getContentList() {
+		ContentResponses contentList = contentService.getContentList();
+		return ResponseEntity.ok(contentList);
+	}
 }
