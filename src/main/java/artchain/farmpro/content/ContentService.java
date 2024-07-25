@@ -34,14 +34,12 @@ public class ContentService {
 	private PromptContext promptContext;
 
 	@Transactional
-	public ContentResponse createContent(ContentRequest request) {
+	public List<ChatGptResponse> createContent(ContentRequest request) {
 		Content content = saveContent(request);
 		saveSelectedCrops(request, content);
 		List<Card> cards = saveCards(request, content);
 
-//		String parlancePrompt = request.parlanceStyle().getDescription();
-//		String cardStylePrompt = request.cardStyle().getDescription();
-		List<ChatGptResponse> chatGptResponses = sendPrompt(cards);
+		List<ChatGptResponse> chatGptResponses = sendContentImagePrompt(cards);
 		List<ContentImage> contentImages = new ArrayList<>();
 		for (int i = 0; i < chatGptResponses.size(); i++) {
 			String cardTitle = cards.get(i).getTitle();

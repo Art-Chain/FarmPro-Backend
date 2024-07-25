@@ -1,7 +1,9 @@
 package artchain.farmpro.content;
 
+import artchain.farmpro.ai.ChatGptResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +21,7 @@ public class ContentController {
 
 	@Operation(summary = "컨텐츠 생성")
 	@PostMapping("/contents")
-	public ResponseEntity<ContentResponse> createContent(@RequestBody ContentRequest request) {
+	public ResponseEntity<List<ChatGptResponse>> createContent(@RequestBody ContentRequest request) {
 		return ResponseEntity.ok(contentService.createContent(request));
 	}
 
