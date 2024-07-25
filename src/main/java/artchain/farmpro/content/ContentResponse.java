@@ -11,7 +11,7 @@ public record ContentResponse(
 		ContentPurpose contentPurpose,
 		String title,
 		String mainText,
-		String textStyle,
+		ParlanceStyle parlanceStyle,
 		ContentImageResponses images,
 		List<ChatGptResponse> chatGptResponses
 ) {
@@ -24,7 +24,7 @@ public record ContentResponse(
 				content.getContentPurpose(),
 				content.getTitle(),
 				content.getMainText(),
-				content.getTextStyle(),
+				content.getParlanceStyle(),
 				images, null);
 	}
 
@@ -35,7 +35,7 @@ public record ContentResponse(
 				content.getContentPurpose(),
 				content.getTitle(),
 				content.getMainText(),
-				content.getTextStyle(),
+				content.getParlanceStyle(),
 				images, null);
 	}
 
@@ -47,14 +47,14 @@ public record ContentResponse(
 				content.getContentPurpose(),
 				content.getTitle(),
 				content.getMainText(),
-				content.getTextStyle(),
+				content.getParlanceStyle(),
 				images,
 				chatGptResponses
 		);
 	}
 
 	ContentResponse(Long id, ContentType contentType, ContentPurpose contentPurpose, String mainText, String title,
-	                String textStyle, ContentImageResponses images, List<ChatGptResponse> chatGptResponses) {
-		this(id, null, contentType, contentPurpose, title, mainText, textStyle, images, chatGptResponses);
+	                ParlanceStyle parlanceStyle, ContentImageResponses images, List<ChatGptResponse> chatGptResponses) {
+		this(id, null, contentType, contentPurpose, title, mainText, parlanceStyle, images, chatGptResponses);
 	}
 }

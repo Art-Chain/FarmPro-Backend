@@ -6,6 +6,7 @@ import artchain.farmpro.ai.prompt.PromptContext;
 import artchain.farmpro.card.Card;
 import artchain.farmpro.card.CardRepository;
 import artchain.farmpro.card.CardRequest;
+import artchain.farmpro.card.CardStyle;
 import artchain.farmpro.card.CardsRequest;
 import artchain.farmpro.content.image.ContentImage;
 import artchain.farmpro.crop.CropRepository;
@@ -96,7 +97,7 @@ public class ContentService {
 
 	private Content saveContent(ContentRequest request) {
 		Content content = new Content(request.contentType(), request.contentPurpose(), request.title(),
-				request.mainText(), request.cardStyle());
+				request.mainText(), request.parlanceStyle());
 		return contentRepository.save(content);
 	}
 
@@ -110,7 +111,7 @@ public class ContentService {
 		selectedCropRepository.saveAll(selectedCrops);
 	}
 
-	private Card saveCard(CardRequest cardRequest, Content content, String cardStyle, String imageUrl) {
+	private Card saveCard(CardRequest cardRequest, Content content, CardStyle cardStyle, String imageUrl) {
 		Card card = new Card(content, cardRequest.title(), cardRequest.keywords(), cardStyle, imageUrl);
 		return cardRepository.save(card);
 	}
@@ -139,11 +140,11 @@ public class ContentService {
 
 	private String generateImagePrompt(Card card) {
 		return String.format("""
-				     You're an image expert at grocery picture generator and descriptor.
+				     You're an image expert at fruit,vegetable picture generator and descriptor.
 				     Create fruit, vegetable picture reference below information.
 				     image has some feature that result must referenced.
 				     - image`s main object is titled %s.
-				     - image's keywords are %s. 
+				     - image's keywords are %s.
 				     - image has a style of %s.
 				     - (Optional) The card has a content like %s.
 				     Card:

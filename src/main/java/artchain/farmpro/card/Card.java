@@ -30,12 +30,12 @@ public class Card {
 	@Column(nullable = false)
 	private String keywords;
 
-	private String cardStyle;
+	private CardStyle cardStyle;
 
 	@Column(length = 1000)
 	private String imageUrl;
 
-	public Card(Content content, String title, String keywords, String cardStyle, String imageUrl) {
+	public Card(Content content, String title, String keywords, CardStyle cardStyle, String imageUrl) {
 		this.content = content;
 		this.title = title;
 		this.keywords = keywords;

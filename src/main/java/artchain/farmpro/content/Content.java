@@ -1,5 +1,6 @@
 package artchain.farmpro.content;
 
+import artchain.farmpro.card.CardStyle;
 import artchain.farmpro.content.image.ContentImage;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -32,20 +33,21 @@ public class Content {
 
 	private String title;
 	private String mainText;
-	private String textStyle;
+	private ParlanceStyle parlanceStyle;
 	private String generatedTitle;
 	@Column(columnDefinition = "TEXT", length = 5000)
 	private String generatedMainText;
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ContentImage> images;
+	private CardStyle cardStyle;
 
 	public Content(ContentType contentType, ContentPurpose contentPurpose, String title, String mainText,
-	               String textStyle) {
+	               ParlanceStyle parlanceStyle) {
 		this.contentType = contentType;
 		this.contentPurpose = contentPurpose;
 		this.title = title;
 		this.mainText = mainText;
-		this.textStyle = textStyle;
+		this.parlanceStyle = parlanceStyle;
 	}
 
 	public void setImages(List<ContentImage> images) {

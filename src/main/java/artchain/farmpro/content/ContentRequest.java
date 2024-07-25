@@ -1,5 +1,6 @@
 package artchain.farmpro.content;
 
+import artchain.farmpro.card.CardStyle;
 import artchain.farmpro.card.CardsRequest;
 import artchain.farmpro.crop.CropRequest;
 import java.util.List;
@@ -12,6 +13,6 @@ public record ContentRequest(
 		CardsRequest cards,
 		String title,
 		String mainText,
-		String parlanceStyle,
-		String cardStyle) {
+		ParlanceStyle parlanceStyle,
+		CardStyle cardStyle) {
 }

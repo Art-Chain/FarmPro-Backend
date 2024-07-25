@@ -1,6 +1,7 @@
 package artchain.farmpro.content;
 
 import artchain.farmpro.ai.ChatGptResponse;
+import artchain.farmpro.card.CardStyle;
 import artchain.farmpro.content.image.ContentImageResponses;
 import java.util.List;
 
@@ -12,7 +13,8 @@ public record ContentCreateResponse(
 		String title,
 		String generatedTitle,
 		String mainText,
-		String textStyle,
+		ParlanceStyle parlanceStyle,
+		CardStyle cardStyle,
 		ContentImageResponses userUploadImages,
 		List<ChatGptResponse> chatGptResponses
 
@@ -27,7 +29,8 @@ public record ContentCreateResponse(
 				images.images().get(0).title(),
 				content.getGeneratedTitle(),
 				content.getMainText(),
-				content.getTextStyle(),
+				content.getParlanceStyle(),
+				content.getCardStyle(),
 				images,
 				chatGptResponses
 		);
@@ -35,8 +38,9 @@ public record ContentCreateResponse(
 
 	ContentCreateResponse(Long id, ContentType contentType, ContentPurpose contentPurpose, String mainText,
 	                      String title, String generatedTitle,
-	                      String textStyle, ContentImageResponses images, List<ChatGptResponse> chatGptResponses) {
-		this(id, null, contentType, contentPurpose, title, generatedTitle, mainText, textStyle, images,
+	                      ParlanceStyle parlanceStyle, CardStyle cardStyle, ContentImageResponses images,
+	                      List<ChatGptResponse> chatGptResponses) {
+		this(id, null, contentType, contentPurpose, title, generatedTitle, mainText, parlanceStyle, cardStyle, images,
 				chatGptResponses);
 	}
 }
