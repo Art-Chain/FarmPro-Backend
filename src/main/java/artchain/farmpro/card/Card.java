@@ -3,6 +3,8 @@ package artchain.farmpro.card;
 import artchain.farmpro.content.Content;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -30,6 +32,7 @@ public class Card {
 	@Column(nullable = false)
 	private String keywords;
 
+	@Enumerated(EnumType.STRING)
 	private CardStyle cardStyle;
 
 	@Column(length = 1000)

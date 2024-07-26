@@ -33,12 +33,14 @@ public class Content {
 
 	private String title;
 	private String mainText;
+	@Enumerated(EnumType.STRING)
 	private ParlanceStyle parlanceStyle;
 	private String generatedTitle;
 	@Column(columnDefinition = "TEXT", length = 5000)
 	private String generatedMainText;
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ContentImage> images;
+	@Enumerated(EnumType.STRING)
 	private CardStyle cardStyle;
 
 	public Content(ContentType contentType, ContentPurpose contentPurpose, String title, String mainText,

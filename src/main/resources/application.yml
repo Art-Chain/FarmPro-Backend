@@ -17,7 +17,7 @@ spring:
   h2:
     console:
       enabled: true
-
+      web-allow-others: true
 openai:
   key: ${OPENAI_API_KEY}
   image-generation:
@@ -41,7 +41,7 @@ ngrok:
 production:
   domain:
     url: ${PRODUCTION_DOMAIN_URL}
-    
+
 aws:
   access-key: ${AWS_ACCESS_KEY}
   secret-key: ${AWS_SECRET_KEY}
