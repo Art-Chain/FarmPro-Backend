@@ -1,0 +1,49 @@
+spring:
+  jpa:
+    open-in-view: false
+    generate-ddl: true
+    show-sql: true
+    properties:
+      hibernate:
+        ddl-auto: update
+        format_sql: true
+
+  datasource:
+    url: jdbc:h2:file:~/farmprodevdb;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+
+openai:
+  key: ${OPENAI_API_KEY}
+  image-generation:
+    endpoint: https://api.openai.com/v1/images/generations
+    model: dall-e-3
+    n: 1
+    size: 1024x1024
+  text-generation:
+    endpoint: https://api.openai.com/v1/chat/completions
+    model: gpt-4o
+springdoc:
+
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: alpha
+
+ngrok:
+  rest-docs:
+    url: ${NGROK_URL}
+
+production:
+  domain:
+    url: ${PRODUCTION_DOMAIN_URL}
+    
+aws:
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
+  region: ${AWS_REGION}
+  s3-bucket-name: ${AWS_S3_BUCKET_NAME}
