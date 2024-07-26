@@ -17,7 +17,8 @@ spring:
   h2:
     console:
       enabled: true
-      web-allow-others: true
+      settings:
+        web-allow-others: true
 openai:
   key: ${OPENAI_API_KEY}
   image-generation:
