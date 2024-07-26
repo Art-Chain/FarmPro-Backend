@@ -1,4 +1,4 @@
-package artchain.farmpro.card;
+package artchain.farmpro.card.dto;
 
 import java.util.List;
 

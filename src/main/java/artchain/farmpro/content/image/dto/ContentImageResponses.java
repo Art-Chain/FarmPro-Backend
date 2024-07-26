@@ -1,5 +1,6 @@
-package artchain.farmpro.content.image;
+package artchain.farmpro.content.image.dto;
 
+import artchain.farmpro.content.image.ContentImage;
 import java.util.List;
 
 public record ContentImageResponses(List<ContentImageResponse> images) {

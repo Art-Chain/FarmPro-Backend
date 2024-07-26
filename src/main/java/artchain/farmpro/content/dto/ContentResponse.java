@@ -1,7 +1,11 @@
-package artchain.farmpro.content;
+package artchain.farmpro.content.dto;
 
-import artchain.farmpro.ai.ChatGptResponse;
-import artchain.farmpro.content.image.ContentImageResponses;
+import artchain.farmpro.ai.dto.ChatGptResponse;
+import artchain.farmpro.content.Content;
+import artchain.farmpro.content.ContentPurpose;
+import artchain.farmpro.content.ContentType;
+import artchain.farmpro.content.ParlanceStyle;
+import artchain.farmpro.content.image.dto.ContentImageResponses;
 import java.util.List;
 
 public record ContentResponse(

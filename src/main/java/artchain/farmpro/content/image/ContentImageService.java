@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-public class ImageService {
+public class ContentImageService {
 
 	@Value("${aws.s3-bucket-name}")
 	private String bucket;

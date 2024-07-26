@@ -1,5 +1,7 @@
 package artchain.farmpro.content.image;
 
+import artchain.farmpro.content.image.dto.ContentImagePresignedUrlVO;
+import artchain.farmpro.content.image.dto.NotifyContentImageSaveSuccessRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -14,16 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Image", description = "이미지 업로드 및 다운로드 API")
 @AllArgsConstructor
 @RestController
-public class ImageController {
+public class ContentImageController {
 
-	private final ImageService imageService;
+	private final ContentImageService contentImageService;
 
 	@Operation(summary = "컨텐츠 이미지 업로드 위치 요청", description = "fileType에는 확장자를, fileName은 파일명을 넣어주세요.")
 	@GetMapping("/image")
 	public ResponseEntity<ContentImagePresignedUrlVO> getContentImage(@RequestParam final String fileType,
 	                                                                  @RequestParam final String fileName) {
 		return ResponseEntity
-				.ok(ContentImagePresignedUrlVO.of(fileName, imageService.getPresignedUrl(fileType, fileName)));
+				.ok(ContentImagePresignedUrlVO.of(fileName, contentImageService.getPresignedUrl(fileType, fileName)));
 	}
 
 	@Operation(summary = "컨텐츠 이미지 업로드 완료", description = "컨텐츠 이미지 업로드 완료를 알립니다.")

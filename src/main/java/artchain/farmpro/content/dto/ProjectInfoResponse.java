@@ -1,6 +1,6 @@
-package artchain.farmpro.content;
+package artchain.farmpro.content.dto;
 
-import artchain.farmpro.crop.CropRequest;
+import artchain.farmpro.crop.dto.CropRequest;
 import io.swagger.v3.oas.annotations.Parameter;
 
 public record ProjectInfoResponse(

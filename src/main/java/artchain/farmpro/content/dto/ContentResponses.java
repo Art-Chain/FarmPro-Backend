@@ -1,5 +1,6 @@
-package artchain.farmpro.content;
+package artchain.farmpro.content.dto;
 
+import artchain.farmpro.content.Content;
 import java.util.List;
 
 public record ContentResponses(List<ContentResponse> contents) {

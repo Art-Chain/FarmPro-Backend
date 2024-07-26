@@ -1,4 +1,4 @@
-package artchain.farmpro.ai;
+package artchain.farmpro.ai.dto;
 
 import java.util.List;
 

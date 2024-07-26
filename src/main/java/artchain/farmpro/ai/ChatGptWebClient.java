@@ -1,5 +1,7 @@
 package artchain.farmpro.ai;
 
+import artchain.farmpro.ai.dto.ChatGptResponse;
+import artchain.farmpro.ai.dto.GPTRecommendResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

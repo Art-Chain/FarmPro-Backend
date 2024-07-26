@@ -1,4 +1,4 @@
-package artchain.farmpro.content.image;
+package artchain.farmpro.content.image.dto;
 
 import java.util.Map;
 

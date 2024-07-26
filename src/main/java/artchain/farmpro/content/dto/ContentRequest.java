@@ -1,8 +1,11 @@
-package artchain.farmpro.content;
+package artchain.farmpro.content.dto;
 
 import artchain.farmpro.card.CardStyle;
-import artchain.farmpro.card.CardsRequest;
-import artchain.farmpro.crop.CropRequest;
+import artchain.farmpro.card.dto.CardsRequest;
+import artchain.farmpro.content.ContentPurpose;
+import artchain.farmpro.content.ContentType;
+import artchain.farmpro.content.ParlanceStyle;
+import artchain.farmpro.crop.dto.CropRequest;
 import java.util.List;
 
 public record ContentRequest(

@@ -1,5 +1,11 @@
 package artchain.farmpro.content;
 
+import artchain.farmpro.content.dto.ContentCreateResponse;
+import artchain.farmpro.content.dto.ContentRecommendRequest;
+import artchain.farmpro.content.dto.ContentRecommendResponse;
+import artchain.farmpro.content.dto.ContentRequest;
+import artchain.farmpro.content.dto.ContentResponse;
+import artchain.farmpro.content.dto.ContentResponses;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;

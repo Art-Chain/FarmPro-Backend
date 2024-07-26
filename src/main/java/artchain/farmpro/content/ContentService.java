@@ -1,13 +1,19 @@
 package artchain.farmpro.content;
 
-import artchain.farmpro.ai.ChatGptResponse;
 import artchain.farmpro.ai.ChatGptWebClient;
+import artchain.farmpro.ai.dto.ChatGptResponse;
 import artchain.farmpro.ai.prompt.PromptContext;
 import artchain.farmpro.card.Card;
 import artchain.farmpro.card.CardRepository;
-import artchain.farmpro.card.CardRequest;
 import artchain.farmpro.card.CardStyle;
-import artchain.farmpro.card.CardsRequest;
+import artchain.farmpro.card.dto.CardRequest;
+import artchain.farmpro.card.dto.CardsRequest;
+import artchain.farmpro.content.dto.ContentCreateResponse;
+import artchain.farmpro.content.dto.ContentRecommendRequest;
+import artchain.farmpro.content.dto.ContentRecommendResponse;
+import artchain.farmpro.content.dto.ContentRequest;
+import artchain.farmpro.content.dto.ContentResponse;
+import artchain.farmpro.content.dto.ContentResponses;
 import artchain.farmpro.content.image.ContentImage;
 import artchain.farmpro.crop.CropRepository;
 import artchain.farmpro.selectedcrop.SelectedCrop;
@@ -42,7 +48,6 @@ public class ContentService {
 		List<ChatGptResponse> chatGptResponses = sendContentImagePrompt(cards);
 		List<ContentImage> contentImages = new ArrayList<>();
 		for (int i = 0; i < chatGptResponses.size(); i++) {
-//			String cardTitle = cards.get(i).getTitle();
 			String cardTitle = sendImageTitlePrompt(request);
 			String imageUrl = chatGptResponses.get(i).data().get(0).url();
 			contentImages.add(new ContentImage(cardTitle, imageUrl, content));

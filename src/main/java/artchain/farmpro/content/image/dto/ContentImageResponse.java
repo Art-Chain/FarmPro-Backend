@@ -1,4 +1,6 @@
-package artchain.farmpro.content.image;
+package artchain.farmpro.content.image.dto;
+
+import artchain.farmpro.content.image.ContentImage;
 
 public record ContentImageResponse(Long id, String title, String imageUrl) {
 
