@@ -20,6 +20,10 @@
     - `Spring Cloud` 2020.0.3
     - `Spring Cloud AWS` 2.4.0
 
+## 사용한 외부 API
+- OpenAI DALL-E (Image generation)
+- OpenA chatGPT (text)
+
 ## 주요 기능
 
 | ![image](https://github.com/user-attachments/assets/8b64544e-93fc-41c1-bbb7-77e195fe9ca1) | ![image](https://github.com/user-attachments/assets/d9be6803-5ca6-478b-a06c-4f9419798e97) | ![image](https://github.com/user-attachments/assets/92eb5753-48b8-46ea-85af-170f6cc44612) |
